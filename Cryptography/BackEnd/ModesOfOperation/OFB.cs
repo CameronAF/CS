@@ -1,21 +1,26 @@
-﻿using BackEnd.Algorithms;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BackEnd.Algorithms;
 using BackEnd.Containers;
 
 namespace BackEnd.ModesOfOperation
 {
     /// <summary>
-    /// Electronic Code Book mode of operation
+    /// Output Feedback mode of operation
     /// </summary>
-    class ECB : IMode
+    class OFB : IMode
     {
         private ulong key;
         DES des;
 
         /// <summary>
-        /// constructor for ECB
+        /// constructor for OFB
         /// </summary>
         /// <param name="inKey">the encryption key</param>
-        public ECB(ulong inKey)
+        public OFB(ulong inKey)
         {
             this.key = inKey;
             des = new DES(key);
@@ -29,9 +34,12 @@ namespace BackEnd.ModesOfOperation
         public Blocks Send(Blocks blocks)
         {
             Blocks encryptedBlocks = new Blocks(blocks.BlockSize, blocks.OriginalLength);
+            Block s = new Block(new BitList(), blocks[0].Size);
             foreach (Block block in blocks)
             {
-                encryptedBlocks.AddBlock(des.Encrypt(block));
+                s = des.Encrypt(s);
+                Block y = new Block(block.GetContent().Xor(s.GetContent()), block.Size);
+                encryptedBlocks.AddBlock(y);
             }
             return encryptedBlocks;
         }
@@ -43,12 +51,7 @@ namespace BackEnd.ModesOfOperation
         /// <returns>Blocks of decrypted text</returns>
         public Blocks Receive(Blocks blocks)
         {
-            Blocks dencryptedBlocks = new Blocks(blocks.BlockSize, blocks.OriginalLength);
-            foreach (Block block in blocks)
-            {
-                dencryptedBlocks.AddBlock(des.Decrypt(block));
-            }
-            return dencryptedBlocks;
+            return Send(blocks);
         }
     }
 }

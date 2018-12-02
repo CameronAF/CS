@@ -20,12 +20,19 @@ namespace BackEnd.Containers
         public BitList(List<bool> input) { Populate(input); }
         public BitList(BitList input) { Populate(input); }
 
+        /// <summary>
+        /// populate this from a Collection
+        /// </summary>
+        /// <param name="collection">the Collection that will populate this</param>
         private void Populate(ICollection collection)
         {
             foreach (bool x in collection) { bitList.Add(x); }
         }
 
-        // shift left (<---) by the amont of spaces specified
+        /// <summary>
+        /// shift left (&lt;---) by the amount of spaces specified
+        /// </summary>
+        /// <param name="spaces">the amount of shaces to shift</param>
         public void ShiftLeft(int spaces)
         {
             var result = bitList.GetRange(spaces, bitList.Count - spaces);
@@ -33,7 +40,10 @@ namespace BackEnd.Containers
             bitList = result;
         }
 
-        // shift --->
+        /// <summary>
+        /// shift right (---&gt;) by the amount of spaces specified
+        /// </summary>
+        /// <param name="spaces">the amount of shaces to shift</param>
         public void ShiftRight(int spaces)
         {
             var result = bitList.GetRange(bitList.Count - spaces, spaces);
@@ -41,6 +51,11 @@ namespace BackEnd.Containers
             bitList = result;
         }
 
+        /// <summary>
+        /// Append the elements of the BitList to the end of the BitList.
+        /// </summary>
+        /// <param name="array2">The Collection whose elements should be appened to the end of this BitList. </param>
+        /// <returns>a new intance of BitList containing elements from both this and the given collection </returns>
         // add a range to the end of BitArray
         public BitList AddRange(BitList array2)
         {
@@ -52,19 +67,28 @@ namespace BackEnd.Containers
             return newBL;
         }
 
-        // add a bool to BitList
+        /// <summary>
+        /// Adds a bool to the end of the BitList.
+        /// </summary>
+        /// <param name="input">The bool to be added to the end of the BitList</param>
         public void Add(bool input)
         {
             bitList.Add(input);
         }
 
-        // Remove a value at given index
+        /// <summary>
+        /// Removes the element at the specified index of the BitList
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to remove.</param>
         public void RemoveAt(int index)
         {
             bitList.RemoveAt(index);
         }
 
-        // Split the BitArrray down the middle and return the back end of the array
+        /// <summary>
+        /// Split the BitArrray in half, keeping the fisrt half.
+        /// </summary>
+        /// <returns>the end half of the BitList after the split</returns>
         public BitList Split()
         {
             List<bool> end = new List<bool>();
@@ -79,7 +103,11 @@ namespace BackEnd.Containers
             return endArray;
         }
 
-        // Xor this BitList and a given BitList. results are returned
+        /// <summary>
+        /// XOR logic on this BitList and a given BitList.
+        /// </summary>
+        /// <param name="list2">The BitList to be used in the XOR operation</param>
+        /// <returns>The output resuts of the XOR logic as a BitList</returns>
         public BitList Xor(BitList list2)
         {
             BitList result = new BitList();
@@ -97,7 +125,11 @@ namespace BackEnd.Containers
             return result;
         }
 
-        // And this BitList and a given BitList. results are returned
+        /// <summary>
+        /// AND logic on this BitList and a given BitList.
+        /// </summary>
+        /// <param name="list2">The BitList to be used in the AND operation</param>
+        /// <returns>The output resuts of the AND logic as a BitList</returns>
         public BitList And(BitList list2)
         {
             BitList result = new BitList();
@@ -115,18 +147,33 @@ namespace BackEnd.Containers
             return result;
         }
 
-        // Return bool indicating if this BitList and a given BitList contain the same values
+        /// <summary>
+        /// Determines whether this instance and a specified BitList, have the same value in the same order.
+        /// </summary>
+        /// <param name="bitList2">The BitList to compare to this instance.</param>
+        /// <returns>true if obj value is the same as this instance; otherwise, false.  If obj is null, the method returns false.</returns>
         public bool Equals(BitList bitList2)
         {
-            for (int i = 0; i < bitList.Count; i++)
+            try
             {
-                if (bitList[i] != bitList2[i]) { return false; }
+                for (int i = 0; i < bitList.Count; i++)
+                {
+                    if (bitList[i] != bitList2[i]) { return false; }
+                }
+                return true;
             }
-            return true;
+            catch { NullReferenceException ex; }
+            {
+                return false;
+            }
 
         }
 
-        // Allows BitList class to be indexble
+        /// <summary>
+        /// Gets or sets the BitList at the specified index.
+        /// </summary>
+        /// <param name="number">The zero-based index of the element to get or set.</param>
+        /// <returns>The bool at the specified index.</returns>
         public bool this[int number]
         {
             get
@@ -162,7 +209,10 @@ namespace BackEnd.Containers
             return copy;
         }
 
-        // Returns an enumerator that iterates theough the BitList.
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An IEnumerator that can be used to iterate through the collection.</returns>
         public IEnumerator GetEnumerator()
         {
             return bitList.GetEnumerator();
@@ -179,7 +229,10 @@ namespace BackEnd.Containers
             ((ICollection<bool>)this).CopyTo(ppArray, index);
         }
 
-        // convert to a byte array
+        /// <summary>
+        /// Converts a BitList vlaue to a byte array.
+        /// </summary>
+        /// <returns>The value of the current BitList object converted to an array of bytes.</returns>
         public byte[] ToByte()
         {
             int x = bitList.Count / 8;

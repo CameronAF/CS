@@ -1,21 +1,26 @@
 ﻿using BackEnd.Algorithms;
 using BackEnd.Containers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BackEnd.ModesOfOperation
 {
     /// <summary>
-    /// Electronic Code Book mode of operation
+    /// Cipher Feedback mode of operation
     /// </summary>
-    class ECB : IMode
+    class CFB :IMode
     {
         private ulong key;
         DES des;
 
         /// <summary>
-        /// constructor for ECB
+        /// constructor for CFB
         /// </summary>
         /// <param name="inKey">the encryption key</param>
-        public ECB(ulong inKey)
+        public CFB(ulong inKey)
         {
             this.key = inKey;
             des = new DES(key);
@@ -29,9 +34,13 @@ namespace BackEnd.ModesOfOperation
         public Blocks Send(Blocks blocks)
         {
             Blocks encryptedBlocks = new Blocks(blocks.BlockSize, blocks.OriginalLength);
+            Block prevY = new Block(new BitList(), blocks[0].Size);
             foreach (Block block in blocks)
             {
-                encryptedBlocks.AddBlock(des.Encrypt(block));
+                Block s = des.Encrypt(prevY);
+                Block y = new Block(block.GetContent().Xor(s.GetContent()), block.Size);
+                encryptedBlocks.AddBlock(y);
+                prevY = new Block(y.GetContent(), y.Size);
             }
             return encryptedBlocks;
         }
@@ -44,9 +53,13 @@ namespace BackEnd.ModesOfOperation
         public Blocks Receive(Blocks blocks)
         {
             Blocks dencryptedBlocks = new Blocks(blocks.BlockSize, blocks.OriginalLength);
+            Block prevY = new Block(new BitList(), blocks[0].Size);
             foreach (Block block in blocks)
             {
-                dencryptedBlocks.AddBlock(des.Decrypt(block));
+                Block s = des.Encrypt(prevY);
+                Block x = new Block(block.GetContent().Xor(s.GetContent()), block.Size);
+                dencryptedBlocks.AddBlock(x);
+                prevY = new Block(block.GetContent(), block.Size);
             }
             return dencryptedBlocks;
         }

@@ -1,12 +1,17 @@
-﻿using BackEnd.Algorithms;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BackEnd.Algorithms;
 using BackEnd.Containers;
 
 namespace BackEnd.ModesOfOperation
 {
     /// <summary>
-    /// Electronic Code Book mode of operation
+    /// Cipher Block Chaining mode of operation
     /// </summary>
-    class ECB : IMode
+    class CBC : IMode
     {
         private ulong key;
         DES des;
@@ -15,7 +20,7 @@ namespace BackEnd.ModesOfOperation
         /// constructor for ECB
         /// </summary>
         /// <param name="inKey">the encryption key</param>
-        public ECB(ulong inKey)
+        public CBC(ulong inKey)
         {
             this.key = inKey;
             des = new DES(key);
@@ -29,9 +34,12 @@ namespace BackEnd.ModesOfOperation
         public Blocks Send(Blocks blocks)
         {
             Blocks encryptedBlocks = new Blocks(blocks.BlockSize, blocks.OriginalLength);
+            Block y = new Block(new BitList(), blocks[0].Size);
             foreach (Block block in blocks)
             {
-                encryptedBlocks.AddBlock(des.Encrypt(block));
+                Block xor = new Block(block.GetContent().Xor(y.GetContent()),block.Size);
+                y = des.Encrypt(xor);
+                encryptedBlocks.AddBlock(y);
             }
             return encryptedBlocks;
         }
@@ -44,9 +52,13 @@ namespace BackEnd.ModesOfOperation
         public Blocks Receive(Blocks blocks)
         {
             Blocks dencryptedBlocks = new Blocks(blocks.BlockSize, blocks.OriginalLength);
+            Block prevY = new Block(new BitList(), blocks[0].Size);
             foreach (Block block in blocks)
             {
-                dencryptedBlocks.AddBlock(des.Decrypt(block));
+                Block xorer = des.Decrypt(block);
+                Block x = new Block(xorer.GetContent().Xor(prevY.GetContent()), block.Size);
+                dencryptedBlocks.AddBlock(x);
+                prevY = block; // shalow copy is ok since we dont do calculations here
             }
             return dencryptedBlocks;
         }

@@ -43,13 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\AES.cs" />
     <Compile Include="Algorithms\DES.cs" />
     <Compile Include="Algorithms\ElGamal.cs" />
     <Compile Include="Containers\BitList.cs" />
     <Compile Include="Containers\Block.cs" />
     <Compile Include="Containers\Blocks.cs" />
+    <Compile Include="ModesOfOperation\CBC.cs" />
+    <Compile Include="ModesOfOperation\CFB.cs" />
+    <Compile Include="ModesOfOperation\CTR.cs" />
     <Compile Include="ModesOfOperation\ECB.cs" />
     <Compile Include="ModesOfOperation\IMode.cs" />
+    <Compile Include="ModesOfOperation\OFB.cs" />
+    <Compile Include="ModesOfOperation\PCBC.cs" />
     <Compile Include="Utilities\RandomBigInteger.cs" />
     <Compile Include="Utilities\Utility.cs" />
     <Compile Include="ViewModel.cs" />

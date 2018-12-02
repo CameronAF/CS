@@ -30,7 +30,11 @@ namespace BackEnd.Algorithms
         }
 
         #region Encryption/Decryption Methods
-        // Encrypt input block using DES algorithum
+        /// <summary>
+        /// Execute encrypt algorithum 
+        /// </summary>
+        /// <param name="input">block to be encrypted</param>
+        /// <returns>Block of encrypted input</returns>
         public Block Encrypt(Block input)
         {
             // get bits from block
@@ -61,7 +65,11 @@ namespace BackEnd.Algorithms
             return new Block(data1, input.Size);
         }
 
-        // Decrypt input block using DES algorithum
+        /// <summary>
+        /// Execute decrypt algorithum 
+        /// </summary>
+        /// <param name="input">block to be decrypted</param>
+        /// <returns>Block of decrypted input</returns>
         public Block Decrypt(Block input)
         {
             // get bits from block
@@ -92,7 +100,9 @@ namespace BackEnd.Algorithms
             return new Block(data1, input.Size);
         }
 
-        // Used to run Initial Permutaion
+        /// <summary>
+        /// Run Initial Permutaion
+        /// </summary>
         private BitList InitialPurmutation(BitList input)
         {
             BitList result = new BitList();
@@ -103,7 +113,11 @@ namespace BackEnd.Algorithms
             return result;
         }
 
-        // Used to run Inverse of Initial Permutaion
+        /// <summary>
+        /// Run Inverse of Initial Permutaion
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private BitList FinalPurmutation(BitList input)
         {
             BitList result = new BitList();
@@ -116,7 +130,9 @@ namespace BackEnd.Algorithms
         #endregion
 
         #region Function Methods 
-        // Run Function with Key
+        /// <summary>
+        /// Run Function with Key
+        /// </summary>
         private BitList Function(BitList input, BitList key)
         {
             // Expand input
@@ -129,7 +145,9 @@ namespace BackEnd.Algorithms
             return FPermutation(bits);
         }
 
-        // Run Expand Permutaion
+        /// <summary>
+        /// Run Expand Permutaion
+        /// </summary>
         private BitList Expand(BitList input)
         {
             BitList result = new BitList();
@@ -140,7 +158,9 @@ namespace BackEnd.Algorithms
             return result;
         }
 
-        // Split input into 8 6-bit packs and run through Dictionary of tuples
+        /// <summary>
+        /// Split input into 8 6-bit packs and run through Dictionary of tuples
+        /// </summary>
         private BitList SBoxes(BitList input)
         {
             // split input into 8 BitList of size 6
@@ -174,7 +194,11 @@ namespace BackEnd.Algorithms
             return results;
         }
 
-        // Run Permutaion in Function
+        /// <summary>
+        /// Run Permutaion in Function
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private BitList FPermutation(BitList input)
         {
             BitList result = new BitList();
@@ -186,7 +210,9 @@ namespace BackEnd.Algorithms
         }
         #endregion
 
-        // Make Tables at initialization
+        /// <summary>
+        /// Make Tables at initialization
+        /// </summary>
         private void MakeTables()
         {
             // make ipTable
@@ -216,9 +242,10 @@ namespace BackEnd.Algorithms
             }
         }
 
-
-        // the Kyy schedualer for DES. The whole Key Schedualing algorithium is doen threw this class
-        // the only public methods are the constructer, GetK_enc() and  GetK_dec()
+        /// <summary>
+        /// The Key schedualer for DES. The whole Key Schedualing algorithium is done through this class
+        /// The only public methods are the constructer, GetK_enc() and  GetK_dec()
+        /// </summary>
         private class KeyScheduler
         {
             private List<int> pc_1table = new List<int>();
