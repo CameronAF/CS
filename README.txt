@@ -9,5 +9,5 @@ This solution Contains the following projects:
      - Microsoft Tutorial: Simple WPF application
  4.	MatchingGame (1 project) 
      - Microsoft Tutorial: WinForm Matching Game
- 5.	PictureViewer (1 project) 
+ 5. PictureViewer (1 project) 
      - Microsoft Tutorial: Winform Picture Display
