@@ -1,0 +1,35 @@
+﻿@*Directive - fully qualifed type of model we are using*@
+@model Vidly.ViewModels.RandomMovieViewModel
+
+@*This is C#*@
+@{
+    ViewBag.Title = "Random";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // names the header as popular if more then 1 customer
+    string className = Model.Customers.Count > 1 ? "popular" : null;
+}
+
+@*This is HTML *@
+
+@*Method 1: using ViewData*@
+@using Vidly.Models
+<h2>@( ((Movie)ViewData["Movie"]).Name)</h2>
+
+@*Method 2: using ViewBag*@
+<h2>@ViewBag.Movie.Name</h2>
+
+@*Method 3: using Model*@
+@*All view have this property, Model, which is the property we pass to it through the controller*@
+<h2 class="@className">@Model.Movie.Name</h2>
+
+@if (Model.Customers.Count == 0)
+{
+    <text>No one has rented this movie before.</text>
+}
+<ul>
+    @foreach (Customer customer in Model.Customers)
+    {
+        <li>@customer.Name</li>
+    }
+</ul>
+
